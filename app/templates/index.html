@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcribe Audio</title>
+</head>
+<body>
+    <h1>Audio Transcription Service</h1>
+    <form id="uploadForm">
+        <input type="file" name="audio_file" id="audioFile" accept="audio/*">
+        <button type="submit">Transcribe</button>
+    </form>
+    <h2>Transcription Result:</h2>
+    <p id="transcription"></p>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const audioData = new FormData();
+            audioData.append('audio_file', document.getElementById('audioFile').files[0]);
+
+            fetch('/transcribe', {
+                method: 'POST',
+                body: audioData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('transcription').innerText = data.transcription;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
